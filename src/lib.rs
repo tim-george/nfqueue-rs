@@ -85,7 +85,7 @@ extern {
     fn nfq_destroy_queue(qh: NfqueueHandle) -> libc::c_int;
     fn nfq_handle_packet(qh: NfqueueHandle, buf: *mut libc::c_void, rc: libc::c_int) -> libc::c_int;
     fn nfq_set_mode (gh: NfqueueQueueHandle, mode: u8, range: u32) -> libc::c_int;
-    fn nfq_set_queuelen (gh: NfqueueQueueHandle, queuelen: u32) -> libc::c_int;
+    fn nfq_set_queue_maxlen (gh: NfqueueQueueHandle, queuelen: u32) -> libc::c_int;
 }
 
 /// Copy modes
@@ -249,7 +249,7 @@ impl <T: Send> Queue<T> {
     /// packets
     pub fn set_queuelen(&self, queuelen: u32) {
         assert!(!self.qqh.is_null());
-        unsafe { nfq_set_queuelen(self.qqh, queuelen); }
+        unsafe { nfq_set_queue_maxlen(self.qqh, queuelen); }
     }
 
     /// Runs an infinite loop, waiting for packets and triggering the callback.
